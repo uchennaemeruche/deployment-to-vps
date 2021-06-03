@@ -1,6 +1,6 @@
 ---
 - name: Deployment playbook
   hosts: all
-  user: root
+  remote_user: mekiostore
   roles:
     - deploy
