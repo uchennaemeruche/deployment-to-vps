@@ -1,0 +1,6 @@
+---
+- name: Deployment playbook
+  hosts: all
+  user: mekiostore
+  roles:
+    - deploy

@@ -1,0 +1,14 @@
+---
+- name: create directory
+  file:
+    path: ~/home/mekiostore/public_html/helloWorldFolder
+    state: directory
+
+- name: copy file to folder
+  template:
+    src: files/index.js
+    dest: ~/home/mekiostore/public_html/helloWorldFolder/
+
+- name: start process
+  shell: |
+    pm2 start ~/home/mekiostore/public_html/helloWorldFolder/index.js -f --name webserver-test
