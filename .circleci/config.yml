@@ -19,4 +19,4 @@ jobs:
 workflows:
   deployment_workflow:
     jobs:
-      # - configure_project
+      - configure_project
