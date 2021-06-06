@@ -1,5 +1,5 @@
 ---
-- hosts: Webserver
+- hosts: all
   remote_user: mekiostore
   tasks:
     - name: create directory
