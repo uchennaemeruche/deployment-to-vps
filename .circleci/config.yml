@@ -28,7 +28,7 @@ jobs:
       - run:
           name: configure and run ansible playbook
           command: |
-            ansible-playbook -i inventory.txt playbook.yml 
+            ansible-playbook --user=mekiostore -vvv -i inventory.txt playbook.yml 
   
 workflows:
   deployment_workflow:
