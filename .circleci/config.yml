@@ -1,63 +1,34 @@
 version: 2.1
-orbs:
-  ansible-ssh: orbss/ansible-ssh@0.7.4
 jobs:
   configure_project:
     docker: 
       - image: python:3.7-alpine3.11
     steps:
       - checkout
+      - run:
+          name: Show OS version
+          command: |
+            if [ -e /etc/os-release ]; then
+              cat /etc/os-release
+            elif [ -e /etc/redhat-release ]; then
+              cat /etc/redhat-release
+            else
+              echo 'Invalid Image' 1>&2
+              exit 1
+            fi
       - add_ssh_keys:
           fingerprints: ["c0:04:eb:73:a2:84:bd:ad:9a:37:aa:1f:2b:07:8d:50"]
-      # - run:
-      #     name: install ansible
-      #     command: |
-      #       apk add --update ansible
       - run:
-          name: Install Ansible
+          name: install ansible
           command: |
-            sudo apt update -y 
-            sudo apt install -y language-pack-ja-base language-pack-ja 
-            sudo apt install -y software-properties-common 
-            sudo apt-add-repository -y ppa:ansible/ansible 
-            sudo apt update -y 
-            sudo apt install -y curl python-dev git 
-            sudo curl "https://bootstrap.pypa.io/get-pip.py" -o "/tmp/get-pip.py" 
-            sudo python /tmp/get-pip.py 
-            sudo pip install --upgrade pip && pip install --upgrade setuptools 
-            sudo pip install ansible
+            apk add --update ansible
       - run:
-          name: Run Docker container
+          name: Show Ansible version
+          command: ansible --version
+      - run:
+          name: configure and run ansible playbook
           command: |
-            sudo docker run -d --name test-01 centos
-            sudo docker ps
-            sudo docker exec test-01 /bin/sh -c 'cat /etc/redhat-release'
-      - run:
-          name: Create Ansible inventory file
-          command: |
-            HOST=`echo $DOCKER_HOST | sed 's|tcp\://||' | sed 's/:.*//'`
-            cd $CIRCLE_WORKING_DIRECTORY
-            echo '[test_servers]' > host
-            echo 'test-01' >> host
-      - run:
-          name: Execute Docker command
-          command: docker exec test-01 /bin/sh -c 'cat /etc/redhat-release'
-      - run:
-          name: Execute Ansible Playbook
-          command: |
-            cd $CIRCLE_WORKING_DIRECTORY
-            whoami
-            export ANSIBLE_REMOTE_TMP="/tmp"
-            ansible-playbook -i host -c docker -u docker install.yml
-      - run:
-          name: 'Execute Ansible Playbook again, checking to make sure it''s idempotent.'
-          command: |
-            cd $CIRCLE_WORKING_DIRECTORY
-            ansible-playbook -i host install.yml
-      # - run:
-      #     name: configure and run ansible playbook
-      #     command: |
-      #       ansible-playbook -i inventory.txt playbook.yml 
+            ansible-playbook -i inventory.txt playbook.yml 
   
 workflows:
   deployment_workflow:
