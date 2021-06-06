@@ -1,7 +1,7 @@
 ---
-- hosts: all
-  remote_user: mekiostore
-  tasks:
+# - hosts: all
+#   remote_user: mekiostore
+- tasks:
     - name: create directory
       file:
         path: /home/mekiostore/public_html/newClientfolder
