@@ -1,14 +1,32 @@
 ---
-- name: create directory
-  file:
-    path: /home/mekiostore/public_html/helloWorldFolder
-    state: directory
+- hosts: Webserver
+  remote_user: mekiostore
+  tasks:
+    - name: create directory
+      file:
+        path: /home/mekiostore/public_html/newClientfolder
+        state: directory
+        # owner: root # Owner of the directory
+        # group: root
+        # mode: 0755  # The permission of the direcotory
 
-- name: copy file to folder
-  template:
-    src: files/index.js
-    dest: /home/mekiostore/public_html/helloWorldFolder/
+    - name: copy file over to folder
+      template:
+        src: files/index.js
+        dest: /home/mekiostore/public_html/newClientfolder/
 
-- name: start process
-  shell: |
-    pm2 start /home/mekiostore/public_html/helloWorldFolder/index.js -f --name webserver-test
+    - name: append record to htaccess file
+      blockinfile:
+        path: /home/mekiostore/public_html/.htaccess
+        backup: yes
+        block: |
+          ClientAliveinterval 360
+          ClientAliveCountMax 0
+
+    - name: start new process
+      shell: |
+        pm2 start /home/mekiostore/public_html/newClientfolder/index.js -f --name sample-web-server
+
+    - name: start mekiostoreApiServer
+      shell: |
+        pm2 start /home/mekiostore/public_html/newMekiostoreApi/index.js -f --name newMekiostoreApi

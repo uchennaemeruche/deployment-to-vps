@@ -1,2 +1,2 @@
 [all]
-144.91.126.99 ansible_port=3155 ansible_user=mekiostore
+144.91.126.99 ansible_connection=ssh ansible_port=3155 ansible_user=mekiostore
