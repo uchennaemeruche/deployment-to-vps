@@ -1,0 +1,24 @@
+---
+- name: stop pm2 process for sample-web-server
+  shell: |
+    pm2 delete sample-web-server
+
+- name: delete uploaded files to newClientfolder
+  file:
+    path: /home/mekiostore/public_html/newClientfolder
+    state: absent
+
+- name: delete files to clienttestdir
+  shell: rm -rf /home/mekiostore/public_html/clienttestdir
+
+- name: delete configuration record from .htaccess
+  blockinfile:
+    path: /home/mekiostore/public_html/.htaccess
+    marker: "<!-- {mark} ANSIBLE MANAGED BLOCK -->"
+    block: ""
+
+- name: delete another configuration from .htaccess
+  blockinfile:
+    path: /home/mekiostore/public_html/.htaccess
+    marker: "# {mark} ANSIBLE MANAGED BLOCK"
+    block: ""
