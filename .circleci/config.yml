@@ -41,6 +41,6 @@ workflows:
   deployment_workflow:
     jobs:
       - configure_project
-      - cleanup_server
+      - cleanup_server:
           requires:
             - configure_project
