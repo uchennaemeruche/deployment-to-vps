@@ -28,9 +28,19 @@ jobs:
       - run:
           name: configure and run ansible playbook
           command: |
-            ansible-playbook --user=mekiostore -vvv -i inventory.txt playbook.yml 
+            ansible-playbook -vvv -i inventory.txt playbook.yml 
+  cleanup_server:
+    docker:
+      - image: python:3.7-alpine3.11
+    steps:
+      - checkout
+      - run:
+          name: ansible-playbook -vvv -i inventory.txt cleanup.yml
   
 workflows:
   deployment_workflow:
     jobs:
       - configure_project
+      - cleanup_server
+          requires:
+            - configure_project
