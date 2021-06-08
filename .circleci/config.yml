@@ -17,7 +17,7 @@ jobs:
               exit 1
             fi
       - add_ssh_keys:
-          fingerprints: ["c0:04:eb:73:a2:84:bd:ad:9a:37:aa:1f:2b:07:8d:50"]
+          fingerprints: ["59:ed:c0:fb:af:97:29:44:39:ec:39:a1:66:bf:c3:7b"]
       - run:
           name: install ansible
           command: |
