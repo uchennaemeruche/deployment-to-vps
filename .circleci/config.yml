@@ -35,7 +35,9 @@ jobs:
     steps:
       - checkout
       - run:
-          name: ansible-playbook -vvv -i inventory.txt cleanup.yml
+          name: clean up server using ansible
+          command: |
+            ansible-playbook -vvv -i inventory.txt cleanup.yml
   
 workflows:
   deployment_workflow:
